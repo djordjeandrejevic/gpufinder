@@ -1,2 +1,2 @@
-cmdhistory=["(def server (jetty/run-jetty \#'app {\:port 8080 \:join? false}))" "(app {\:uri \\"/hello\\"})" "(use 'clojure.repl)" "urls" "@urls"]
+cmdhistory=["(def server (jetty/run-jetty \#'app {\:port 8080 \:join? false}))" "(app {\:uri \\"/hello\\"})" "(use 'clojure.repl)" "urls" "@urls" "(require '[net.cgrand.enlive-html \:as html])" "(and nil nil)" "(and seq nil)" "(and [1 2 3] nil)" "(and [1 2 3] [1 2 3])" "(and \\"blah\\" \\"blah\\")" "(mc/find db \\"users\\" {\:username \\"admin\\"})" "(mc/find db \\"users\\" {\:username \\"sadasd\\"})" "(mc/find-maps db \\"users\\" {\:username \\"sadasd\\"})" "(mc/find db \\"users\\" {\:username \\"admin\\"})" "(and () ())" "(and \\"blah\\" \\"blah\\")" "(empty? ())"]
 eclipse.preferences.version=1

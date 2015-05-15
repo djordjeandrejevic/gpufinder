@@ -17,3 +17,7 @@
   connection
   (if (empty? (get-all "users"))
     (insert-admin)))
+
+(defn auth [username password]
+  (let [existing-username (mc/find-maps db "users" {:username username}) existing-password (mc/find-maps db "users" {:password password})]    
+    (and (empty? existing-username) (empty? existing-password))))
