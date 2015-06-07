@@ -26,3 +26,4 @@
     (do
       (session/put! :session-message "Passwords didn't match!")
       (redirect "/register"))))
+

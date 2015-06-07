@@ -13,10 +13,14 @@
 (defn insert-admin []
   (mc/insert db "users" {:id (inc 1) :username "admin" :password "admin" }))
 
+(defn test-insert []
+  (mc/insert db "gpus" {:id (inc 1) :model "GTX 960"}))
+
 (defn initialize []
   connection
   (if (empty? (get-all "users"))
-    (insert-admin)))
+    (insert-admin))
+  (test-insert))
 
 (defn auth [username password]
   (let [existing-username (mc/find-maps db "users" {:username username}) existing-password (mc/find-maps db "users" {:password password})]    
@@ -28,4 +32,3 @@
       (mc/insert db "users" {:id (inc 1) :username username :password password})
       true)
     false))
-
