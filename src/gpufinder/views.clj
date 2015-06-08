@@ -21,6 +21,9 @@
 (defn register-page []
   (render-resource "templates/register.html" {:error (session/get :session-message)}))
 
+(defn initialize-gpus-page []
+  (render-resource "templates/register.html"))
+
 ;(defn work-page []
 ;  (render-resource "templates/work.html" {:name "Nikola"} (default-partials)))
 ;

@@ -13,5 +13,5 @@
                  [org.clojure/data.xml "0.0.8"]
                  [org.clojure/data.zip "0.1.1"]]
   :plugins [[lein-ring "0.9.1"]]
-  :ring {:init db.db/initialize
+  :ring {:init gpufinder.controller/initialize-gpus                  
          :handler gpufinder.core/app})

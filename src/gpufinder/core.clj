@@ -5,9 +5,10 @@
         [hiccup.middleware :only (wrap-base-url)]
         [noir.util.middleware])
   (:require [compojure.route :as route]
-            [compojure.handler :as handler]
+            [compojure.handler :as handler]            
             [compojure.response :as response]
-            [noir.session :as session]))
+            [noir.session :as session]
+            [noir.response :refer [redirect]]))
 
 (defroutes main-routes
   ;  (GET "/" request "Welcome!"))
@@ -16,6 +17,7 @@
   (GET "/register" [] (register-page))
   (POST "/register" [username password repeated-password] (register username password repeated-password))
   (POST "/login" [username password] (login username password))
+  (POST "/initialize-gpus" [] (initialize-gpus))
   (route/resources "/")
   (route/not-found (not-found)))
 

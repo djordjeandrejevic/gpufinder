@@ -16,11 +16,17 @@
 (defn test-insert []
   (mc/insert db "gpus" {:id (inc 1) :model "GTX 960"}))
 
-(defn initialize []
+(defn test-user []
+  (mc/insert db "users" {:id (inc 1) :username "test" :password "test" }))
+
+
+
+(defn initialize-users []
   connection
-  (if (empty? (get-all "users"))
-    (insert-admin))
-  (test-insert))
+  (do
+    (if (empty? (get-all "users"))
+      (insert-admin)
+      false)))
 
 (defn auth [username password]
   (let [existing-username (mc/find-maps db "users" {:username username}) existing-password (mc/find-maps db "users" {:password password})]    
@@ -32,3 +38,10 @@
       (mc/insert db "users" {:id (inc 1) :username username :password password})
       true)
     false))
+
+;(defn insert-gpu [gpu]
+;  (mc/insert db "gpus" {:url (gpu :url) :model (gpu :model) :rating (gpu :rating) :type (gpu :type) :vram (gpu :vram) :tdp (gpu :tdp) :price (gpu :price)}))
+
+
+(defn insert-gpu [gpu]
+  (mc/insert db "gpus" {:url (gpu :url) :model (gpu :model) :rating (gpu :rating) :type (gpu :type) :vram (gpu :vram) :tdp (gpu :tdp) :price (gpu :price)}))

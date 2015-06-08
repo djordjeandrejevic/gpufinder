@@ -3,14 +3,7 @@
            [clojure.data.xml :as xml]
            [clojure.data.zip.xml :as xz]
            [clojure.java.io :as io]
-           [net.cgrand.enlive-html :as html]
-           [monger.core :as mg]
-           [monger.collection :as mc])
-  (:import (org.bson.types ObjectId)))
-
-(def connection (mg/connect))
-
-(def db (mg/get-db connection "gpufinder_db"))
+           [net.cgrand.enlive-html :as html]))
 
 (def data-url "http://gpuboss.com/sitemap/gpus.xml")
 
@@ -48,21 +41,21 @@
 
 (def testiranje (zipmap fields (scrape-data "http://gpuboss.com/graphics-card/GeForce-GTX-960")))
 
-(def heshmapa (zipmap fields (hn-headlines-three "http://gpuboss.com/graphics-card/GeForce-GTX-960")))
+;(def heshmapa (zipmap fields (hn-headlines-three "http://gpuboss.com/graphics-card/GeForce-GTX-960")))
 
-(defn is-desktop-initial [link]
-  (let [gpu (order-scraped-data link)]
-    (if (= (gpu :type) "Desktop")
-      gpu
-      false)))
+;(defn is-desktop-initial [link]
+;  (let [gpu (order-scraped-data link)]
+;    (if (= (gpu :type) "Desktop")
+;      gpu
+;      false)))
 
 ;(defn is-desktop [link]
 ;    (if (= ((order-scraped-data link) :type) "Desktop")
 ;       true
 ;       false))
 
-(defn insert-gpu-into-db [link]
-  (let [gpu (is-desktop-initial link)]
-    (if gpu
-      (mc/insert db "gpus" {:id (inc 1) :model (gpu :model)})
-      false)))
+;(defn insert-gpu-into-db [link]
+;  (let [gpu (is-desktop-initial link)]
+;    (if gpu
+;      (mc/insert db "gpus" {:model (gpu :model)})
+;      false)))

@@ -1,8 +1,20 @@
 (ns gpufinder.controller
-  (:use [db.db :as db])
+  (:use [db.db :as db]
+        [gpufinder.scrapper :as scrapper])
   (:require  [noir.response :refer [redirect]]
              [noir.session :as session]
              [ring.util.response :refer [response]]))
+
+(defn to-numeric [value]
+  (.replaceAll value "[^0-9]" ""))
+
+(defn initialize-gpus []    
+  (for [x (scrapper/all-gpus)] 
+    (let [gpu (scrapper/order-scraped-data x)]
+      (if (= (gpu :type) "Desktop")
+        (if (= 7 (count gpu))          
+        (db/insert-gpu gpu))))))
+
 
 (defn login [username password]
   (let [user-doesnt-exist (db/auth username password)]
@@ -11,7 +23,7 @@
         (session/put! :session-message "Incorrect username or password!")
         (redirect "/"))
       (do
-        (session/put! :name username)
+        (session/put! :name username)       
         (redirect "index")))))
 
 (defn register [username password repeated-password]
@@ -27,3 +39,12 @@
       (session/put! :session-message "Passwords didn't match!")
       (redirect "/register"))))
 
+
+
+(defn initialize-data []
+  (db/initialize-users))
+
+;(for [x (scrapper/all-gpus)]
+;    (if (= (x :type) "Desktop")
+;      gpu
+;      false)))
