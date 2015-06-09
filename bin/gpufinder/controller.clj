@@ -8,12 +8,19 @@
 (defn to-numeric [value]
   (.replaceAll value "[^0-9]" ""))
 
+(defn gpu-without-letters [raw-gpu]
+  (let [tdp (to-numeric (raw-gpu :tdp))
+        vram (to-numeric (raw-gpu :vram))
+        price (to-numeric (raw-gpu :price))]
+   (dissoc raw-gpu :tdp :vram :price)
+   (assoc raw-gpu :tdp tdp :vram vram :price price)))
+    
 (defn initialize-gpus []    
   (for [x (scrapper/all-gpus)] 
     (let [gpu (scrapper/order-scraped-data x)]
       (if (= (gpu :type) "Desktop")
         (if (= 7 (count gpu))          
-        (db/insert-gpu gpu))))))
+        (db/insert-gpu (gpu-without-letters gpu)))))))
 
 
 (defn login [username password]

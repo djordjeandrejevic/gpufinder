@@ -56,10 +56,10 @@
                             <a class="page-scroll" href="#about">About</a>
                         </li>
                         <li>
-                            <a class="page-scroll" href="#download">Download</a>
+                            <a class="page-scroll" href="#search">Search</a>
                         </li>
                         <li>
-                            <a class="page-scroll" href="#contact">Contact</a>
+                            <a class="page-scroll" href="#bye">Bye</a>
                         </li>
                     </ul>
                 </div>
@@ -91,75 +91,109 @@
                 <div class="col-lg-8 col-lg-offset-2">
                     <h2>About GPUFinder</h2>
                     <p>GPUFinder is tool that helps you find the right graphic card for your PC.</p><br>
-                    <p>Before you begin calculations, please click on the "Initialize GPU database" button below. Also, be patient because it can take some time to fetch all necessary data.</p>
+                    <p>Before you begin calculations, please click on the "Initialize GPU database" button below. Also, be patient because it can take some time to fetch all necessary data. It takes usually few minutes.</p>
                     <form method="POST" action="/initialize-gpus">
-                    <input type="submit" class="text-center btn btn-default btn-lg" value="Initialize GPU database" />
+                        <input type="submit" class="text-center btn btn-default btn-lg" value="Initialize GPU database" />
                     </form>
                 </div>
             </div>
         </section>
 
         <!-- Download Section -->
-        <section id="download" class="content-section text-center">
+        <section id="search" class="content-section text-center">
             <div class="download-section">
                 <div class="container">
                     <div class="col-lg-8 col-lg-offset-2">
-                        <h2>Download Grayscale</h2>
-                        <p>You can download Grayscale for free on the preview page at Start Bootstrap.</p>
-                        <a href="http://startbootstrap.com/template-overviews/grayscale/" class="btn btn-default btn-lg">Visit Download Page</a>
-                    </div>
-                </div>
+                        <h2>Great!</h2>
+                        <p>Now that you have successfully initialized GPU database, you can use filters and search form below to find your best buy.</p>
+                        <br>
+                        <form method="POST" action="/find-gpu">
+                            <h4>Price (in RSD):</h4>                            
+                            <select class="form-control" id="price">
+                                <option value="0">-- doesn't matter --</option>
+                                <option value="5000"> < 5000 </option>
+                                <option value="10000">5.000 - 10.000 </option>
+                                <option value="15000">10.000 - 15.000</option>
+                                <option value="20000">15.000 - 20.000</option>
+                                <option value="25000">20.000 - 30.000</option>
+                                <option value="30000">30.000 - 35.000</option>
+                                <option value="30001">35.000 +</option>
+                            </select>
+                            <br>
+                            <br>
+                            <h4>Video RAM size (in MB):</h4>
+                            <div class="form form-group">
+                              <div class="radio">
+                                  <label><input type="radio" value="0" name="vram" checked="true">Doesn't matter</label>
+                              </div>
+                              <div class="radio">
+                                  <label><input type="radio" value="512" name="vram"> 512+ MB </label>
+                              </div>
+                              <div class="radio">
+                                  <label><input type="radio" value="1024" name="vram">1024+ MB</label>
+                              </div>
+                              <div class="radio">
+                                  <label><input type="radio" value="2048" name="vram">2048+ MB</label>
+                              </div>
+                          </div>   
+                          <br>
+                          <h4>Your PSU power (in watts):</h4>
+                          <input class="form form-control" name="tdp">
+                          <br>
+                          <input type="submit" class="text-center btn btn-default btn-lg" value="Find GPU!" />
+                      </form>                      
+                  </div>
+              </div>
+          </div>
+      </section>
+
+      <!-- Contact Section -->
+      <section id="bye" class="container content-section text-center">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <hr>
+                <br>
+                <br>
+                <br>
+                <br>                
+                <h2>Thanks for using GPUFinder</h2>
+                <br>
+                <br>
+                <br>
+                <hr>
+                <br>
+                <p>We look forward to see you again! You can logout by clicking on the button below. Regards!</p>
+                <br>
+                <br>
+
+                <a href="/logout" class="btn btn-default btn-lg"><i class="fa fa-sign-out"></i> <span class="network-name">Logout</span></a>
+
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Contact Section -->
-        <section id="contact" class="container content-section text-center">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2">
-                    <h2>Contact Start Bootstrap</h2>
-                    <p>Feel free to email us to provide some feedback on our templates, give us suggestions for new templates and themes, or to just say hello!</p>
-                    <p><a href="mailto:feedback@startbootstrap.com">feedback@startbootstrap.com</a>
-                    </p>
-                    <ul class="list-inline banner-social-buttons">
-                        <li>
-                            <a href="https://twitter.com/SBootstrap" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
-                        </li>
-                        <li>
-                            <a href="https://github.com/IronSummitMedia/startbootstrap" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
-                        </li>
-                        <li>
-                            <a href="https://plus.google.com/+Startbootstrap/posts" class="btn btn-default btn-lg"><i class="fa fa-google-plus fa-fw"></i> <span class="network-name">Google+</span></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p>Copyright &copy; Đorđe Andrejević 2015</p>
+        </div>
+    </footer>
 
-        <!-- Map Section -->
-        <div id="map"></div>
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
 
-        <!-- Footer -->
-        <footer>
-            <div class="container text-center">
-                <p>Copyright &copy; Your Website 2014</p>
-            </div>
-        </footer>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
 
-        <!-- jQuery -->
-        <script src="js/jquery.js"></script>
+    <!-- Plugin JavaScript -->
+    <script src="js/jquery.easing.min.js"></script>
 
-        <!-- Bootstrap Core JavaScript -->
-        <script src="js/bootstrap.min.js"></script>
+    <!-- Google Maps API Key - Use your own API key to enable the map feature. More information on the Google Maps API can be found at https://developers.google.com/maps/ -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRngKslUGJTlibkQ3FkfTxj3Xss1UlZDA&sensor=false"></script>
 
-        <!-- Plugin JavaScript -->
-        <script src="js/jquery.easing.min.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="js/grayscale.js"></script>
 
-        <!-- Google Maps API Key - Use your own API key to enable the map feature. More information on the Google Maps API can be found at https://developers.google.com/maps/ -->
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRngKslUGJTlibkQ3FkfTxj3Xss1UlZDA&sensor=false"></script>
+</body>
 
-        <!-- Custom Theme JavaScript -->
-        <script src="js/grayscale.js"></script>
-
-    </body>
-
-    </html>
+</html>
