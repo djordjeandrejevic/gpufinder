@@ -109,15 +109,15 @@
                         <br>
                         <form method="POST" action="/find-gpu">
                             <h4>Price (in RSD):</h4>                            
-                            <select class="form-control" id="price">
+                            <select class="form-control" id="price" name="price">
                                 <option value="0">-- doesn't matter --</option>
-                                <option value="5000"> < 5000 </option>
-                                <option value="10000">5.000 - 10.000 </option>
-                                <option value="15000">10.000 - 15.000</option>
-                                <option value="20000">15.000 - 20.000</option>
-                                <option value="25000">20.000 - 30.000</option>
-                                <option value="30000">30.000 - 35.000</option>
-                                <option value="30001">35.000 +</option>
+                                <option value="&quot;$lt&quot; 5000"> < 5000 </option>
+                                <option value="&quot;$gt&quot; 5000, &quot;$lt&quot; 10000">5.000 - 10.000 </option>
+                                <option value="&quot;$gt&quot; 10000, &quot;$lt&quot; 15000">10.000 - 15.000</option>
+                                <option value="&quot;$gt&quot; 15000, &quot;$lt&quot; 20000">15.000 - 20.000</option>
+                                <option value="&quot;$gt&quot; 20000, &quot;$lt&quot; 25000">20.000 - 25.000</option>
+                                <option value="&quot;$gt&quot; 25000, &quot;$lt&quot; 30000">25.000 - 30.000</option>
+                                <option value="&quot;$gt&quot; 30000">30.000 +</option>
                             </select>
                             <br>
                             <br>
@@ -127,18 +127,18 @@
                                   <label><input type="radio" value="0" name="vram" checked="true">Doesn't matter</label>
                               </div>
                               <div class="radio">
-                                  <label><input type="radio" value="512" name="vram"> 512+ MB </label>
+                                  <label><input type="radio" value="&quot;$gt&quot; 512" name="vram"> 512+ MB </label>
                               </div>
                               <div class="radio">
-                                  <label><input type="radio" value="1024" name="vram">1024+ MB</label>
+                                  <label><input type="radio" value="&quot;$gt&quot; 1024" name="vram">1024+ MB</label>
                               </div>
                               <div class="radio">
-                                  <label><input type="radio" value="2048" name="vram">2048+ MB</label>
+                                  <label><input type="radio" value="&quot;$gt&quot; 2048" name="vram">2048+ MB</label>
                               </div>
                           </div>   
                           <br>
                           <h4>Your PSU power (in watts):</h4>
-                          <input class="form form-control" name="tdp">
+                          <input class="form form-control" name="psu" required>
                           <br>
                           <input type="submit" class="text-center btn btn-default btn-lg" value="Find GPU!" />
                       </form>                      

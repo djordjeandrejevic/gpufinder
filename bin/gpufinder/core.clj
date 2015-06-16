@@ -18,6 +18,7 @@
   (POST "/register" [username password repeated-password] (register username password repeated-password))
   (POST "/login" [username password] (login username password))
   (POST "/initialize-gpus" [] (initialize-gpus))
+  (POST "/find-gpu" [price vram psu] (find-gpu price vram psu))
   (route/resources "/")
   (route/not-found (not-found)))
 

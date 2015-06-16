@@ -45,3 +45,8 @@
 
 (defn insert-gpu [gpu]
   (mc/insert db "gpus" {:url (gpu :url) :model (gpu :model) :rating (gpu :rating) :type (gpu :type) :vram (gpu :vram) :tdp (gpu :tdp) :price (gpu :price)}))
+
+;(defn search-gpu-db [myAtom])
+
+(defn find-gpu-in-db [myAtom]
+  (mc/find-maps db "gpus" {:tdp {(@myAtom :tdp)} :vram {"$lt" (@myAtom :vram)} :price {(@myAtom :price)}}))
