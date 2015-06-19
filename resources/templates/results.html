@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Login | GPUFinder</title>
+
+	<!-- Bootstrap Core CSS -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	
+	<style type="text/css">
+		body {
+			background-image: url('img/subtlecarbon.png');
+		}
+	</style>
+
+</head>
+
+<body>
+	<div class="jumbotron text-center">
+		<h1>Search Results</h1>
+		<!--<p>Please login or register.</p>-->
+	</div>	
+	<div class="col-lg-5"></div>
+	<div class="text-center col-lg-2">	
+		<ul>
+			{{#results}}
+			<li>{{model}}</li>
+			{{/results}}
+		</ul>
+	</div>
+	<div class="col-lg-5"></div>
+
+
+</div>
+
+</body>
+
+</html>

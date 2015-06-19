@@ -1,6 +1,8 @@
 (ns db.db
   (:require [monger.core :as mg]
-            [monger.collection :as mc])
+            [monger.collection :as mc]
+            [monger.conversion :as mconv]
+            [monger.operators :refer :all])
   (:import (org.bson.types ObjectId)))
 
 (def connection (mg/connect))
@@ -49,4 +51,13 @@
 ;(defn search-gpu-db [myAtom])
 
 (defn find-gpu-in-db [myAtom]
-  (mc/find-maps db "gpus" {:tdp {(@myAtom :tdp)} :vram {"$lt" (@myAtom :vram)} :price {(@myAtom :price)}}))
+  (let [tdp (@myAtom :tdp)
+        vram (@myAtom :vram)
+        price (@myAtom :price)]
+;    (mc/find-maps db "gpus" {:tdp {$lt 150} :vram {$gt 512} :price {$lt 7000}})))
+;  (mconv/from-db-object (mc/find db "gpus" {:tdp {"$lt" (@myAtom :tdp)} :vram {@myAtom :vram} :price {@myAtom :price}}) true))
+;  (mconv/from-db-object (mc/find db "gpus" {:tdp {(str "$lt" tdp)} :vram {vram} :price {price}}) true)))
+(mc/find-maps db "gpus" {:tdp {$lt tdp} :vram {vram} :price {price}})))
+;{:tdp (str "$lt " tdp) :vram vram :price price}))
+
+(def mojAtom (atom {:tdp "250" :vram "\"$gt\" 1024" :price "\"$gt\" 20000, \"$lt\" 25000"}))

@@ -24,6 +24,9 @@
 (defn initialize-gpus-page []
   (render-resource "templates/register.html"))
 
+(defn gpu-results-page [results]
+  (render-resource "templates/results.html" results))
+
 ;(defn work-page []
 ;  (render-resource "templates/work.html" {:name "Nikola"} (default-partials)))
 ;
