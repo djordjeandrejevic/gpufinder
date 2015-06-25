@@ -16,7 +16,7 @@
 (defn index-page []
   (if (empty? (session/get :name))
     (render-resource "templates/login.html" {:error (session/get :session-message)})  
-    (render-resource "templates/index.html" {:name (session/get :name)})))
+    (render-resource "templates/index.html" {:name (session/get :name) :error (session/get :session-message)})))
 
 (defn register-page []
   (render-resource "templates/register.html" {:error (session/get :session-message)}))

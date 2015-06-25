@@ -2,8 +2,10 @@
   (:use [db.db :as db]
         [gpufinder.scrapper :as scrapper])
   (:require  [noir.response :refer [redirect]]
+             [noir.response :refer [json]]
              [noir.session :as session]
-             [ring.util.response :refer [response]]))
+             [ring.util.response :refer [response]]
+             [clojure.string :as str]))
 
 (defn to-numeric [value]
   (.replaceAll value "[^0-9]" ""))
@@ -15,7 +17,7 @@
     (dissoc raw-gpu :tdp :vram :price)
     (assoc raw-gpu :tdp (read-string tdp) :vram (read-string vram) :price (read-string price))))
 
-(defn initialize-gpus []    
+(defn initialize-gpus []  
   (for [x (scrapper/all-gpus)] 
     (let [gpu (scrapper/order-scraped-data x)]
       (if (= (gpu :type) "Desktop")
@@ -51,7 +53,7 @@
 (defn initialize-data []
   (db/initialize-users))
 
-(defn return-tdp [psu]
+(defn return-tdp [psu]  
   (cond
     (if (and (> psu 0) (< psu 300))
       75) 75
@@ -68,24 +70,36 @@
     (if (> psu 600)
       java.lang.Integer/MAX_VALUE) java.lang.Integer/MAX_VALUE))
 
-
-(defn validate-psu [psu]
-  (if (number? psu)
+(defn validate-psu [psu-string]
+  (let [psu (java.lang.Integer/parseInt psu-string)]
     (if (< psu 0)
-      (session/put! :session-message "You must enter positive number of watts for your PSU!") 
+      (do
+        (session/put! :session-message "You must enter positive number of watts for your PSU!")
+        (redirect "/index"))
       (let [tdp (return-tdp psu)]
-        tdp))
-    (session/put! :session-message "You must enter number for PSU wattage, not characters!")))
+        tdp))))
 
+(defn get-prices-from-string [price_string]
+  (let [splitted_array (str/split price_string #" ")]
+    (let [price {:price_from (read-string (nth splitted_array 0)) :price_to (read-string (nth splitted_array 1))}]
+      price)))
 
-(defn find-gpu [price vram psu]
+(def mojAtom2 (atom {:tdp 250 :vram 1024 :price {:price_from 2000 :price_to 10000}}))
+
+(defn create-clostache-friendly-response [results]
+  {:results (into [] results) })
+
+(defn find-gpu [price vram psu]  
   (let [myAtom (atom {:price "" :vram "" :tdp ""})]
-    (if-not (= price 0)
-      (swap! myAtom assoc :price price))
+    (if-not (= (read-string price) 0)
+      (swap! myAtom assoc :price (get-prices-from-string price))
+      (swap! myAtom assoc :price {:price_from 0 :price_to  java.lang.Integer/MAX_VALUE}))
     (if-not (= vram 0)
-      (swap! myAtom assoc :vram vram))
-    (swap! myAtom assoc :tdp (validate-psu psu))
-    (db/find-gpu-in-db myAtom)))
+      (swap! myAtom assoc :vram (read-string vram))
+      (swap! myAtom assoc :vram java.lang.Integer/MIN_VALUE))
+    (swap! myAtom assoc :tdp (validate-psu psu))      
+    (create-clostache-friendly-response (db/find-gpu-in-db myAtom))))
+
 
 ;(db/search-gpu-db query)))
 

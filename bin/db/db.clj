@@ -57,7 +57,9 @@
 ;    (mc/find-maps db "gpus" {:tdp {$lt 150} :vram {$gt 512} :price {$lt 7000}})))
 ;  (mconv/from-db-object (mc/find db "gpus" {:tdp {"$lt" (@myAtom :tdp)} :vram {@myAtom :vram} :price {@myAtom :price}}) true))
 ;  (mconv/from-db-object (mc/find db "gpus" {:tdp {(str "$lt" tdp)} :vram {vram} :price {price}}) true)))
-(mc/find-maps db "gpus" {:tdp {$lt tdp} :vram {vram} :price {price}})))
+(mc/find-maps db "gpus" {:tdp {$lt tdp} :vram {$gt vram} :price {$lt (price :price_to) $gt (price :price_from)}})))
 ;{:tdp (str "$lt " tdp) :vram vram :price price}))
 
-(def mojAtom (atom {:tdp "250" :vram "\"$gt\" 1024" :price "\"$gt\" 20000, \"$lt\" 25000"}))
+(def mojAtom (atom {:tdp 250 :vram 1024 :price {:price_from 2000 :price_to 10000}}))
+
+;(defmacro string-without-quotes [string] `(println ~(name nsym)))
