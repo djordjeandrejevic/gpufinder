@@ -29,11 +29,16 @@
   (let [user-doesnt-exist (db/auth username password)]
     (if user-doesnt-exist
       (do
-        (session/put! :session-message "Incorrect username or password!")
+        (session/put! :session-message "Incorrect username or password!")        
         (redirect "/"))
       (do
         (session/put! :name username)       
         (redirect "index")))))
+
+(defn logout []
+  (do
+    (session/remove! (session/get! :name))
+    (redirect "/")))
 
 (defn register [username password repeated-password]
   (if (= password repeated-password)
@@ -57,17 +62,17 @@
   (cond
     (if (and (> psu 0) (< psu 300))
       75) 75
-    (if (and (> psu 300) (< psu 400))
+    (if (and (>= psu 300) (< psu 400))
       120) 120
-    (if (and (> psu 400) (< psu 450))
+    (if (and (>= psu 400) (< psu 450))
       150) 150
-    (if (and (> psu 450) (< psu 500))
+    (if (and (>= psu 450) (< psu 500))
       180) 180
-    (if (and (> psu 500) (< psu 550))
+    (if (and (>= psu 500) (< psu 550))
       210) 210
-    (if (> psu 550) (< psu 600)
+    (if (>= psu 550) (< psu 600)
       230) 230
-    (if (> psu 600)
+    (if (>= psu 600)
       java.lang.Integer/MAX_VALUE) java.lang.Integer/MAX_VALUE))
 
 (defn validate-psu [psu-string]
@@ -100,6 +105,9 @@
     (swap! myAtom assoc :tdp (validate-psu psu))      
     (create-clostache-friendly-response (db/find-gpu-in-db myAtom))))
 
+;(defn get-wishlist []
+;  (let [user (session/get! :name)]
+    
 
 ;(db/search-gpu-db query)))
 

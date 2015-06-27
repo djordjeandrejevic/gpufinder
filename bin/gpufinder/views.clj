@@ -27,6 +27,9 @@
 (defn gpu-results-page [results]
   (render-resource "templates/results.html" results))
 
+(defn wishlist-page []
+  (render-resource "templates/wishlist.html"))
+
 ;(defn work-page []
 ;  (render-resource "templates/work.html" {:name "Nikola"} (default-partials)))
 ;

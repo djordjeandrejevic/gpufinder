@@ -13,32 +13,231 @@
 
 	<!-- Bootstrap Core CSS -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- jQuery -->
+	<script src="js/jquery.js"></script>
+
+	<!-- Bootstrap Core JavaScript -->
+	<script src="js/bootstrap.min.js"></script>
+
+	<!-- Plugin JavaScript -->
+	<script src="js/jquery.easing.min.js"></script>
 	
 	<style type="text/css">
 		body {
-			background-image: url('img/subtlecarbon.png');
+			background-image: url('img/subtlecarbon.png');			
 		}
+
+		.tabela {
+			color: white;
+			font-size: 1.2em;			
+		}
+
+		ul.dropdown-cart{
+			min-width:250px;
+		}
+		ul.dropdown-cart li .item{
+			display:block;
+			padding:3px 10px;
+			margin: 3px 0;
+		}
+		ul.dropdown-cart li .item:hover{
+			background-color:#f3f3f3;
+		}
+		ul.dropdown-cart li .item:after{
+			visibility: hidden;
+			display: block;
+			font-size: 0;
+			content: " ";
+			clear: both;
+			height: 0;
+		}
+
+		ul.dropdown-cart li .item-left{
+			float:left;
+		}
+		ul.dropdown-cart li .item-left img,
+		ul.dropdown-cart li .item-left span.item-info{
+			float:left;
+		}
+		ul.dropdown-cart li .item-left span.item-info{
+			margin-left:10px;   
+		}
+		ul.dropdown-cart li .item-left span.item-info span{
+			display:block;
+		}
+		ul.dropdown-cart li .item-right{
+			float:right;
+		}
+		ul.dropdown-cart li .item-right button{
+			margin-top:14px;
+		}
+
+		#list li {
+			list-style: circle;
+			margin-left: 25px;
+		}
+
 	</style>
 
 </head>
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container-fluid">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/index">GPUFinder</a>
+		</div>
 
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<!--<ul class="nav navbar-nav">
+				<li class="active"><a href="#">Category one <span class="sr-only">(current)</span></a></li>
+				<li><a href="#">Category two</a></li>
+			</ul>-->
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <span class=" glyphicon glyphicon-star"></span> Wishlist (<span id="counter"></span>) <span class="caret"></span></a>
+					<ul class="dropdown-menu dropdown-cart" role="menu" id="list">
+
+						<br>
+						<div class="text-center"><button type="submit" id="save_all"  form="wishlist_form" class="btn btn-primary">Save All</button></div>
+						<hr>
+					</ul>
+				</li>
+			</ul>
+		</div><!-- /.navbar-collapse -->
+	</div><!-- /.container-fluid -->
+</nav>
 <body>
 	<div class="jumbotron text-center">
-		<h1>Search Results</h1>
-		<!--<p>Please login or register.</p>-->
-	</div>	
-	<div class="col-lg-5"></div>
-	<div class="text-center col-lg-2">	
-		<ul>
-			{{#results}}
-			<li>{{model}}</li>
-			{{/results}}
-		</ul>
+		<h1>Search Results</h1>		
 	</div>
-	<div class="col-lg-5"></div>
+	<div class="row">
+		<div class="col-lg-2"></div>
+		<div class="text-center col-lg-8 tabela">
 
+			<table class="table">
+				<thead>
+					<tr>
+						<th class="text-center">Model</th>
+						<th class="text-center">VRAM (MB)</th>
+						<th class="text-center">TDP (W)</th>
+						<th class="text-center">Price (RSD)</th>
+						<th class="text-center">Rating (0-10)</th>
+						<th class="text-center">Full specs</th>
+						<th class="text-center">Add to wishlist</th>
+					</tr>
+				</thead>
+				<tbody>
+					<form method="POST" action="/add-to-wishlist" id="wishlist_form">
+					<input type="hidden" name="wishlist" id="wishlist_field">
+					</form>		
+					{{#results}}
+					
+					<tr>
+						<td>{{model}}</td>
+						<td>{{vram}}</td>
+						<td>{{tdp}}</td>
+						<td>{{price}}</td>
+						<td>{{rating}}</td>
+						<td><a href="{{url}}">{{url}}</a></td>
+						<td>
+							<!--<button class="btn btn-default add" name="dugme" type="submit" value="{{_id}}" form="wishlist_form">Add</button>-->
+							<button class="btn btn-default add" name="dugme" value="{{model}}" >Add</button>
+						</td>
+					</tr>					
+					
+					{{/results}}					
+				</tbody>
+			</table>
+
+			<br>
+			<hr>
+			<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+			<b><a href="/index">Back to index page</a></b>
+			<br>
+			<hr>
+		</div>
+		<div class="col-lg-2"></div>
+	</div>
 
 </div>
+
+<script>
+
+	var counter = 0;
+
+	var gpuArray = new Array();
+
+	$('#counter').html(counter);
+
+	checkSaveAllButton();
+
+	$('.add').on('click', function() {
+
+		if($(this).hasClass('btn btn-default')) {
+			$(this).removeClass('btn btn-default').addClass('btn btn-primary');
+			$(this).html("Remove");
+			//console.log($(this).val());			
+			counter++;
+			refreshCounter();			
+			addToList($(this).val());
+			$('#save_all').show();
+			gpuArray.push($(this).val());
+//			console.log(gpuArray);
+			$("#wishlist_field").val(gpuArray);
+		}
+		else {
+			$(this).removeClass('btn btn-primary').addClass('btn btn-default');
+			$(this).html("Add");
+			//console.log($(this).val());
+			counter--;
+			refreshCounter();
+			checkSaveAllButton();
+			removeFromList($(this).val());
+			for(var i = 0; i < gpuArray.length; i++) {
+				if(gpuArray[i] == $(this).val()) {
+					gpuArray.splice(i, 1);
+				}
+			}
+			$("#wishlist_field").val(gpuArray);
+//			console.log(gpuArray);
+		}
+	});
+
+	function checkSaveAllButton() {
+		if(counter == 0) {
+			$('#save_all').hide();		
+		}
+	}
+
+	function refreshCounter() {
+		$('#counter').html(counter);
+	}
+
+	function addToList(model)
+	{
+		var li_element = model;
+		var ul = document.getElementById("list");
+		var li = document.createElement("li");
+		li.setAttribute("id", model);
+		li.appendChild(document.createTextNode(li_element));
+		ul.appendChild(li);
+	}
+
+	function removeFromList(model)
+	{
+		$(document.getElementById(model)).remove();		
+	}
+
+
+</script>
 
 </body>
 
