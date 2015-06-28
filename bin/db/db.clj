@@ -15,14 +15,6 @@
 (defn insert-admin []
   (mc/insert db "users" {:id (inc 1) :username "admin" :password "admin" }))
 
-(defn test-insert []
-  (mc/insert db "gpus" {:id (inc 1) :model "GTX 960"}))
-
-(defn test-user []
-  (mc/insert db "users" {:id (inc 1) :username "test" :password "test" }))
-
-
-
 (defn initialize-users []
   connection
   (do
@@ -41,25 +33,25 @@
       true)
     false))
 
-;(defn insert-gpu [gpu]
-;  (mc/insert db "gpus" {:url (gpu :url) :model (gpu :model) :rating (gpu :rating) :type (gpu :type) :vram (gpu :vram) :tdp (gpu :tdp) :price (gpu :price)}))
-
-
 (defn insert-gpu [gpu]
   (mc/insert db "gpus" {:url (gpu :url) :model (gpu :model) :rating (gpu :rating) :type (gpu :type) :vram (gpu :vram) :tdp (gpu :tdp) :price (gpu :price)}))
-
-;(defn search-gpu-db [myAtom])
 
 (defn find-gpu-in-db [myAtom]
   (let [tdp (@myAtom :tdp)
         vram (@myAtom :vram)
         price (@myAtom :price)]
-;    (mc/find-maps db "gpus" {:tdp {$lt 150} :vram {$gt 512} :price {$lt 7000}})))
-;  (mconv/from-db-object (mc/find db "gpus" {:tdp {"$lt" (@myAtom :tdp)} :vram {@myAtom :vram} :price {@myAtom :price}}) true))
-;  (mconv/from-db-object (mc/find db "gpus" {:tdp {(str "$lt" tdp)} :vram {vram} :price {price}}) true)))
-(mc/find-maps db "gpus" {:tdp {$lt tdp} :vram {$gt vram} :price {$lt (price :price_to) $gt (price :price_from)}})))
-;{:tdp (str "$lt " tdp) :vram vram :price price}))
+    (mc/find-maps db "gpus" {:tdp {$lt tdp} :vram {$gt vram} :price {$lt (price :price_to) $gt (price :price_from)}})))
+
+(defn find-gpu-by-name [gpu-name]
+  (mc/find-one-as-map db "gpus" {:model {$regex gpu-name}}))
+
+(defn read-wishlist [username]
+    (mc/find-maps db "users" {:username username} ["gpus"]))
+
+(defn save-to-wishlist [gpu username]
+    (mc/update db "users" {:username username} {$addToSet {:gpus (find-gpu-by-name gpu)}}))
+
+(defn remove-from-wishlist [gpu-id username]
+    (mc/update db "users" {:username username} {$pull {:gpus {:_id (ObjectId. gpu-id)}}}))
 
 (def mojAtom (atom {:tdp 250 :vram 1024 :price {:price_from 2000 :price_to 10000}}))
-
-;(defmacro string-without-quotes [string] `(println ~(name nsym)))

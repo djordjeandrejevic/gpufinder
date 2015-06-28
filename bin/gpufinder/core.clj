@@ -21,8 +21,8 @@
   (POST "/initialize-gpus" [] (initialize-gpus))
   (POST "/find-gpu" [price vram psu] (let [results (find-gpu price vram psu)] (gpu-results-page results)))
   ;  (POST "/find-gpu" [price vram psu] (find-gpu price vram psu))
-  ;  (GET "/wishlist" [] (let [list (get-wishlist)] (wishlist-page list)))
-  (GET "/wishlist" [] (wishlist-page))
+  (GET "/wishlist" [] (let [list (get-wishlist)] (wishlist-page list)))
+;  (GET "/wishlist" [] (wishlist-page))
   (route/resources "/")
   (route/not-found (not-found)))
 

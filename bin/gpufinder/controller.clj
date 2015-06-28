@@ -89,6 +89,10 @@
     (let [price {:price_from (read-string (nth splitted_array 0)) :price_to (read-string (nth splitted_array 1))}]
       price)))
 
+(defn get-gpus-from-string [gpu_string]
+  (let [splitted_array (str/split gpu_string #" ,")]
+    splitted_array))
+
 (def mojAtom2 (atom {:tdp 250 :vram 1024 :price {:price_from 2000 :price_to 10000}}))
 
 (defn create-clostache-friendly-response [results]
@@ -105,6 +109,11 @@
     (swap! myAtom assoc :tdp (validate-psu psu))      
     (create-clostache-friendly-response (db/find-gpu-in-db myAtom))))
 
+(defn get-wishlist []
+  (create-clostache-friendly-response (db/read-wishlist (session/get! :name))))
+;(defn add-to-wishlist [gpu_string]
+;  (doseq [wishlist-gpu (get-gpus-from-string gpu_string)]
+;    (db/save-to-wishlist wishlist-gpu)))
 ;(defn get-wishlist []
 ;  (let [user (session/get! :name)]
     
