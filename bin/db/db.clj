@@ -43,7 +43,7 @@
     (mc/find-maps db "gpus" {:tdp {$lt tdp} :vram {$gt vram} :price {$lt (price :price_to) $gt (price :price_from)}})))
 
 (defn find-gpu-by-name [gpu-name]
-  (mc/find-one-as-map db "gpus" {:model {$regex gpu-name}}))
+  (mc/find-one-as-map db "gpus" {:model gpu-name}))
 
 (defn read-wishlist [username]
     (mc/find-maps db "users" {:username username} ["gpus"]))
@@ -53,5 +53,3 @@
 
 (defn remove-from-wishlist [gpu-id username]
     (mc/update db "users" {:username username} {$pull {:gpus {:_id (ObjectId. gpu-id)}}}))
-
-(def mojAtom (atom {:tdp 250 :vram 1024 :price {:price_from 2000 :price_to 10000}}))

@@ -110,7 +110,7 @@
                         <h2>Great!</h2>
                         <p>Now that you have successfully initialized GPU database, you can use filters and search form below to find your best buy.</p>
                         <br>
-                        <p class="text-center text-danger">{{ error }}</p>
+                        <p class="text-center text-danger">{{ validation-error }}</p>
                         <form method="POST" action="/find-gpu">
                             <h4>Price (in RSD):</h4>                            
                             <select class="form-control" id="price" name="price">

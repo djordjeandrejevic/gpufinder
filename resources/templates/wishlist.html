@@ -53,11 +53,11 @@
 						<th class="text-center">Price (RSD)</th>
 						<th class="text-center">Rating (0-10)</th>
 						<th class="text-center">Full specs</th>
-						<th class="text-center">Add to wishlist</th>
+						<th class="text-center">Remove from wishlist</th>
 					</tr>
 				</thead>
 				<tbody>
-					<form method="POST" action="/blah" id="wishlist_form">
+					<form method="POST" action="/remove-from-wishlist" id="wishlist_form">
 					</form>		
 					{{#results}}
 					
@@ -68,7 +68,7 @@
 						<td>{{price}}</td>
 						<td>{{rating}}</td>
 						<td><a href="{{url}}">{{url}}</a></td>
-						<td><button class="btn btn-default" name="dugme" type="submit" value="{{_id}}" form="wishlist_form">Add</button></td>
+						<td><button class="btn btn-default" name="gpu-id" type="submit" value="{{_id}}" form="wishlist_form">Remove</button></td>
 					</tr>					
 					
 					{{/results}}					

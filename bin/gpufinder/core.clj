@@ -10,8 +10,7 @@
             [noir.session :as session]
             [noir.response :refer [redirect]]))
 
-(defroutes main-routes
-  ;  (GET "/" request "Welcome!"))
+(defroutes main-routes  
   (GET "/" [] (login-page))
   (GET "/index" [] (index-page))
   (GET "/register" [] (register-page))
@@ -20,14 +19,13 @@
   (GET "/logout" [] (logout))
   (POST "/initialize-gpus" [] (initialize-gpus))
   (POST "/find-gpu" [price vram psu] (let [results (find-gpu price vram psu)] (gpu-results-page results)))
-  ;  (POST "/find-gpu" [price vram psu] (find-gpu price vram psu))
-  (GET "/wishlist" [] (let [list (get-wishlist)] (wishlist-page list)))
-;  (GET "/wishlist" [] (wishlist-page))
+  (GET "/wishlist" [] (let [results (get-wishlist)] (wishlist-page results)))
+  (POST "/add-to-wishlist" [wishlist] (add-to-wishlist wishlist))
+  (POST "/remove-from-wishlist" [gpu-id] (delete-from-wishlist gpu-id))
   (route/resources "/")
   (route/not-found (not-found)))
 
 (def app
   (-> (handler/site main-routes)
-    (session/wrap-noir-session)
-    ;(session/wrap-noir-flash)
+    (session/wrap-noir-session)    
     (wrap-base-url)))

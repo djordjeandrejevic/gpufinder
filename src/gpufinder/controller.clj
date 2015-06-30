@@ -10,19 +10,20 @@
 (defn to-numeric [value]
   (.replaceAll value "[^0-9]" ""))
 
-(defn gpu-with-integer-fields [raw-gpu]
-  (let [tdp (to-numeric (raw-gpu :tdp))
+(defn prepare-gpu-for-db [raw-gpu]
+  (let [model (subs (raw-gpu :model) 0 (dec (count (raw-gpu :model))))
+        tdp (to-numeric (raw-gpu :tdp))
         vram (to-numeric (raw-gpu :vram))
         price (to-numeric (raw-gpu :price))]
-    (dissoc raw-gpu :tdp :vram :price)
-    (assoc raw-gpu :tdp (read-string tdp) :vram (read-string vram) :price (read-string price))))
+    (dissoc raw-gpu :model :tdp :vram :price)
+    (assoc raw-gpu :model model :tdp (read-string tdp) :vram (read-string vram) :price (read-string price))))
 
 (defn initialize-gpus []  
   (for [x (scrapper/all-gpus)] 
     (let [gpu (scrapper/order-scraped-data x)]
       (if (= (gpu :type) "Desktop")
         (if (= 7 (count gpu))          
-          (db/insert-gpu (gpu-with-integer-fields gpu)))))))
+          (db/insert-gpu (prepare-gpu-for-db gpu)))))))
 
 
 (defn login [username password]
@@ -79,7 +80,7 @@
   (let [psu (java.lang.Integer/parseInt psu-string)]
     (if (< psu 0)
       (do
-        (session/put! :session-message "You must enter positive number of watts for your PSU!")
+        (session/put! :validation-error "You must enter positive number of watts for your PSU!")
         (redirect "/index"))
       (let [tdp (return-tdp psu)]
         tdp))))
@@ -90,10 +91,11 @@
       price)))
 
 (defn get-gpus-from-string [gpu_string]
-  (let [splitted_array (str/split gpu_string #" ,")]
-    splitted_array))
+  (let [splitted_array (str/split gpu_string #",")]
+    (map str/trim splitted_array)))
 
-(def mojAtom2 (atom {:tdp 250 :vram 1024 :price {:price_from 2000 :price_to 10000}}))
+(defn extract-map-field-from-nested-response [result]
+  ((into {} result) :gpus))
 
 (defn create-clostache-friendly-response [results]
   {:results (into [] results) })
@@ -110,18 +112,15 @@
     (create-clostache-friendly-response (db/find-gpu-in-db myAtom))))
 
 (defn get-wishlist []
-  (create-clostache-friendly-response (db/read-wishlist (session/get! :name))))
-;(defn add-to-wishlist [gpu_string]
-;  (doseq [wishlist-gpu (get-gpus-from-string gpu_string)]
-;    (db/save-to-wishlist wishlist-gpu)))
-;(defn get-wishlist []
-;  (let [user (session/get! :name)]
-    
+  (create-clostache-friendly-response (extract-map-field-from-nested-response (db/read-wishlist (session/get :name)))))
 
-;(db/search-gpu-db query)))
+(defn delete-from-wishlist [gpu-id]
+  (do
+    (db/remove-from-wishlist gpu-id (session/get :name))
+    (redirect "/wishlist")))
 
+(defn add-to-wishlist [wishlist]  
+  (doseq [wishlist-gpu (get-gpus-from-string wishlist)]    
+    (db/save-to-wishlist wishlist-gpu (session/get :name)))
+  (redirect "/wishlist"))
 
-;(for [x (scrapper/all-gpus)]
-;    (if (= (x :type) "Desktop")
-;      gpu
-;      false)))

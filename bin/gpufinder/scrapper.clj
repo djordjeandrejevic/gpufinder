@@ -38,24 +38,3 @@
 (def fields [:url :model :rating :type :vram :tdp :price])
 
 (defn order-scraped-data [link] (zipmap fields (scrape-data link)))
-
-(def testiranje (zipmap fields (scrape-data "http://gpuboss.com/graphics-card/GeForce-GTX-960")))
-
-;(def heshmapa (zipmap fields (hn-headlines-three "http://gpuboss.com/graphics-card/GeForce-GTX-960")))
-
-;(defn is-desktop-initial [link]
-;  (let [gpu (order-scraped-data link)]
-;    (if (= (gpu :type) "Desktop")
-;      gpu
-;      false)))
-
-;(defn is-desktop [link]
-;    (if (= ((order-scraped-data link) :type) "Desktop")
-;       true
-;       false))
-
-;(defn insert-gpu-into-db [link]
-;  (let [gpu (is-desktop-initial link)]
-;    (if gpu
-;      (mc/insert db "gpus" {:model (gpu :model)})
-;      false)))
