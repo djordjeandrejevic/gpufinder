@@ -54,8 +54,6 @@
       (session/put! :session-message "Passwords didn't match!")
       (redirect "/register"))))
 
-
-
 (defn initialize-data []
   (db/initialize-users))
 
@@ -123,4 +121,3 @@
   (doseq [wishlist-gpu (get-gpus-from-string wishlist)]    
     (db/save-to-wishlist wishlist-gpu (session/get :name)))
   (redirect "/wishlist"))
-

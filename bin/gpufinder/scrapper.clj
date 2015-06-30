@@ -34,7 +34,6 @@
                                               [:#prop_tdp :td.value :span :span :span]
                                               [:#prop_memory_size :td.value :span :span :span]})) link))
 
-
 (def fields [:url :model :rating :type :vram :tdp :price])
 
 (defn order-scraped-data [link] (zipmap fields (scrape-data link)))
